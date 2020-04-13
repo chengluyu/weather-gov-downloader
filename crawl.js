@@ -1,7 +1,9 @@
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const { default: axios } = require('axios');
+const {
+  default: axios
+} = require('axios');
 
 const file = path.join.bind(null, __dirname, 'data');
 const exists = name => fs.existsSync(file(`${name}.json`));
@@ -21,6 +23,25 @@ async function main() {
 
     const first = `${year}-01-01`;
     const last = `${year}-12-31`;
+    const data = {
+      "elems": [
+        { "name": "maxt", "add": "t" },
+        { "name": "mint", "add": "t" },
+        { "name": "avgt", "add": "t" },
+        { "name": "avgt", "normal": "departure", "add": "t" },
+        { "name": "hdd", "add": "t" },
+        { "name": "cdd", "add": "t" },
+        { "name": "pcpn", "add": "t" },
+        { "name": "snow", "add": "t" },
+        { "name": "snwd", "add": "t" },
+      ],
+      "sid": "SEAthr+9",
+      "sDate": first,
+      "eDate": last,
+    };
+    const serializedData = JSON.stringify(data)
+      .replace(/[^\w+]/g, x => '%' + x.charCodeAt(0).toString(16).toUpperCase());
+    // console.log(serializedData);
     const response = await axios({
       "method": "POST",
       "url": "https://data.rcc-acis.org/StnData",
@@ -35,7 +56,7 @@ async function main() {
         "DNT": "1",
         "Referer": "https://nowdata.rcc-acis.org/sew/"
       },
-      "data": `params=%7B%22elems%22%3A%5B%7B%22name%22%3A%22maxt%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22mint%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22avgt%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22avgt%22%2C%22normal%22%3A%22departure%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22hdd%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22cdd%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22pcpn%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22snow%22%2C%22add%22%3A%22t%22%7D%2C%7B%22name%22%3A%22snwd%22%2C%22add%22%3A%22t%22%7D%5D%2C%22sid%22%3A%22SEAthr+9%22%2C%22sDate%22%3A%22${first}%22%2C%22eDate%22%3A%22${last}%22%7D&output=json`,
+      "data": `params=${serializedData}&output=json`,
       proxy: {
         // export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891
         host: '127.0.0.1',
