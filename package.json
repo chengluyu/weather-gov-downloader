@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "axios": "^0.19.2",
-    "mkdirp": "^1.0.4",
-    "playwright": "^0.13.0"
+    "mkdirp": "^1.0.4"
   }
 }
