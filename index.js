@@ -17,7 +17,7 @@ const failuresPath = path.join(__dirname, "data", "failures.json")
 
 const reportFailure = (data) => {
   failures.push(data)
-  save(failures, failuresPath)
+  save(failuresPath, failures)
 }
 
 async function main() {
